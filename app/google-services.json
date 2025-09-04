@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "244374503175",
+    "project_id": "musicplayer-ec517",
+    "storage_bucket": "musicplayer-ec517.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:244374503175:android:30bc7beaa7ea915d1dcfa2",
+        "android_client_info": {
+          "package_name": "com.crowdfunding"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBNGKvol9T87kSaShFg7MIekXfwmkkoCII"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:244374503175:android:601c4682ce95fb111dcfa2",
+        "android_client_info": {
+          "package_name": "com.musicplayer.musicapp.music.mp3player"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBNGKvol9T87kSaShFg7MIekXfwmkkoCII"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

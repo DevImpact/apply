@@ -1,0 +1,75 @@
+<resources>
+    <string name="app_name">مشاريع إستثماريّة</string>
+    <string name="facebook_app_id">102031639868996</string>
+    <string name="fb_login_protocol_scheme">fb102031639868996</string>
+    <string name="facebook_client_token">c8529e6b20f9f0955eb6beb8e107d6f0ab21d4d02bf0db77e13ecd38f2be85c5</string>
+
+    <string name="update_profile">تحديث الملف الشخصي</string>
+    <string name="send_verification_code">إرسال رمز التحقق</string>
+    <string name="verification_code">رمز التحقق</string>
+    <string name="first_name">الاسم الأول</string>
+    <string name="last_name">الاسم الأخير</string>
+    <string name="confirm_facebook_link">الربط مع فيسبوك</string>
+    <string name="dont_have_account">ليس لديك حساب؟</string>
+    <string name="register_now">سجل الآن</string>
+    <string name="already_have_account">هل لديك حساب بالفعل؟</string>
+    <string name="login">تسجيل الدخول</string>
+    <string name="email">البريد الإلكتروني</string>
+    <string name="password">كلمة المرور</string>
+    <string name="confirm_password">تأكيد كلمة المرور</string>
+    <string name="register">تسجيل</string>
+
+    <!-- AdMob Test Ad Unit IDs -->
+    <string name="admob_interstitial_id">ca-app-pub-3940256099942544/1033173712</string>
+    <string name="admob_app_open_id">ca-app-pub-3940256099942544/9257395921</string>
+
+    <!-- General & Common -->
+    <string name="app_logo_content_description">شعار التطبيق</string>
+    <string name="back_button_content_description">رجوع</string>
+    <string name="toggle_password_visibility_content_description">إظهار/إخفاء كلمة المرور</string>
+    <string name="user_avatar_content_description">الصورة الرمزية للمستخدم</string>
+    <string name="error_user_not_found">لم يتم العثور على المستخدم.</string>
+    <string name="error_project_not_found">لم يتم العثور على المشروع.</string>
+    <string name="downloading">جاري التحميل...</string>
+
+    <!-- Screen Titles -->
+    <string name="title_profile">الملف الشخصي</string>
+    <string name="title_projects">المشاريع</string>
+    <string name="title_project_details">تفاصيل المشروع</string>
+    <string name="title_public_profile">ملف شخصي عام</string>
+
+    <!-- Profile Screen -->
+    <string name="complete_your_profile">أكمل ملفك الشخصي</string>
+    <string name="activate_profile">تفعيل الملف الشخصي</string>
+    <string name="toast_facebook_login_success">تم تسجيل الدخول بنجاح عبر فيسبوك!</string>
+    <string name="toast_facebook_login_canceled">تم إلغاء تسجيل الدخول عبر فيسبوك.</string>
+    <string name="toast_facebook_login_error">خطأ في تسجيل الدخول عبر فيسبوك: %1$s</string>
+    <string name="facebook_linked_button">تم الربط</string>
+
+    <!-- Projects Screen -->
+    <string name="no_projects_yet">لا توجد مشاريع حتى الآن.</string>
+    <string name="goal_prefix">الهدف:</string>
+    <string name="status_prefix">الحالة:</string>
+
+    <!-- Project Details Screen -->
+    <string name="statistics">إحصائيات</string>
+    <string name="investors_count">المستثمرون: %d</string>
+    <string name="donors_count">المتبرعون: %d</string>
+    <string name="advertisers_count">المعلنون: %d</string>
+    <string name="attachments">المرفقات</string>
+    <string name="download_pdf_prefix">تحميل PDF:</string>
+    <string name="my_intention_prefix">نيتي الحالية:</string>
+    <string name="intention_none">لا يوجد</string>
+    <string name="invest_button">استثمار</string>
+    <string name="donate_button">تبرع</string>
+    <string name="advertise_button">إعلان</string>
+    <string name="see_investors_button">المستثمرين</string>
+    <string name="see_donors_button">المتبرعين</string>
+    <string name="see_advertisers_button">المعلنين</string>
+
+    <!-- Intention List Screen -->
+    <string name="intention_investors">المستثمرون</string>
+    <string name="intention_donors">المتبرعون</string>
+    <string name="intention_advertisers">المعلنون</string>
+    <string name="intention_list_title_format">%1$s للمشروع</string>
+</resources>
