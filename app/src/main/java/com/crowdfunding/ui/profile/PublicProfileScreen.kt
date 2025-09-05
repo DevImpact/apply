@@ -40,22 +40,30 @@ fun PublicProfileScreen(
                 .padding(16.dp),
             contentAlignment = Alignment.Center
         ) {
-            if (uiState.isLoading) {
-                CircularProgressIndicator()
-            } else if (uiState.userProfile != null) {
-                Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                    Text(
-                        text = uiState.userProfile!!.fullName,
-                        style = MaterialTheme.typography.headlineMedium
-                    )
-                    Spacer(modifier = Modifier.height(8.dp))
-                    Text(
-                        text = uiState.userProfile!!.email,
-                        style = MaterialTheme.typography.bodyLarge
-                    )
+            val profile = uiState.userProfile
+            when {
+                uiState.isLoading -> {
+                    CircularProgressIndicator()
                 }
-            } else {
-                Text(stringResource(R.string.error_user_not_found))
+                profile != null -> {
+                    // Because of the 'profile' variable, smart casting applies here.
+                    // No need for the unsafe '!!' operator.
+                    Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                        Text(
+                            text = profile.fullName,
+                            style = MaterialTheme.typography.headlineMedium
+                        )
+                        Spacer(modifier = Modifier.height(8.dp))
+                        Text(
+                            text = profile.email,
+                            style = MaterialTheme.typography.bodyLarge
+                        )
+                    }
+                }
+                else -> {
+                    // Handles the case where loading is false and profile is null.
+                    Text(stringResource(R.string.error_user_not_found))
+                }
             }
         }
     }
