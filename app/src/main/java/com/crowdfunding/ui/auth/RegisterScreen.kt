@@ -1,5 +1,6 @@
 package com.crowdfunding.ui.auth
 
+import android.app.Application
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
@@ -15,6 +16,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.PasswordVisualTransformation
@@ -23,11 +25,14 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.crowdfunding.R
 import com.crowdfunding.ui.theme.FacebookBlue
+import com.crowdfunding.util.CrashlyticsUtils.safeRun
 
 @Composable
 fun RegisterScreen(
     onNavigateToLogin: () -> Unit,
-    viewModel: RegisterViewModel = viewModel()
+    viewModel: RegisterViewModel = viewModel(
+        factory = RegisterViewModelFactory(LocalContext.current.applicationContext as Application)
+    )
 ) {
     val uiState by viewModel.uiState.collectAsState()
 
@@ -94,7 +99,7 @@ fun RegisterScreen(
                         Icons.Filled.Visibility
                     else Icons.Filled.VisibilityOff
 
-                    IconButton(onClick = viewModel::onPasswordVisibilityChange) {
+                    IconButton(onClick = { safeRun(rethrow = false) { viewModel.onPasswordVisibilityChange() } }) {
                         Icon(imageVector = image, contentDescription = stringResource(R.string.toggle_password_visibility_content_description))
                     }
                 },
@@ -113,7 +118,7 @@ fun RegisterScreen(
                         Icons.Filled.Visibility
                     else Icons.Filled.VisibilityOff
 
-                    IconButton(onClick = viewModel::onConfirmPasswordVisibilityChange) {
+                    IconButton(onClick = { safeRun(rethrow = false) { viewModel.onConfirmPasswordVisibilityChange() } }) {
                         Icon(imageVector = image, contentDescription = stringResource(R.string.toggle_password_visibility_content_description))
                     }
                 },
@@ -125,7 +130,7 @@ fun RegisterScreen(
             }
             Spacer(modifier = Modifier.height(16.dp))
             Button(
-                onClick = { viewModel.register() },
+                onClick = { safeRun(rethrow = false) { viewModel.register() } },
                 modifier = Modifier.fillMaxWidth(),
                 enabled = uiState.email.isNotBlank() && uiState.password.isNotBlank() && uiState.confirmPassword.isNotBlank() && !uiState.isLoading,
                 colors = buttonColors
@@ -142,7 +147,7 @@ fun RegisterScreen(
             Spacer(modifier = Modifier.height(8.dp))
             Row(verticalAlignment = Alignment.CenterVertically) {
                 Text(stringResource(id = R.string.already_have_account), color = Color.White)
-                TextButton(onClick = onNavigateToLogin) {
+                TextButton(onClick = { safeRun(rethrow = true) { onNavigateToLogin() } }) {
                     Text(stringResource(id = R.string.login), color = Color.White)
                 }
             }

@@ -3,6 +3,7 @@ plugins {
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
     alias(libs.plugins.google.services)
+    alias(libs.plugins.firebase.crashlytics)
 }
 
 android {
@@ -27,6 +28,9 @@ android {
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
             )
+            firebaseCrashlytics {
+                mappingFileUploadEnabled = true
+            }
         }
     }
 
@@ -65,6 +69,9 @@ dependencies {
     // Images
     implementation(libs.coil.compose)
 
+    // Logging
+    implementation(libs.timber)
+
     // Facebook SDK
     implementation(libs.facebook.android.sdk)
 
@@ -73,6 +80,7 @@ dependencies {
     implementation(libs.firebase.database)
     implementation(libs.firebase.analytics)
     implementation(libs.firebase.auth)
+    implementation(libs.firebase.crashlytics)
 
     // Google UMP (User Messaging Platform)
     implementation("com.google.android.ump:user-messaging-platform:2.2.0")

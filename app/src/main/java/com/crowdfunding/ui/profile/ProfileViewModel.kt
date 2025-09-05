@@ -1,8 +1,12 @@
 package com.crowdfunding.ui.profile
 
+import android.app.Application
+import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import android.os.Bundle
+import com.crowdfunding.App
 import com.crowdfunding.data.AuthRepository
 import com.facebook.AccessToken
 import com.facebook.GraphRequest
@@ -27,8 +31,9 @@ sealed class Event {
 }
 
 class ProfileViewModel(
+    application: Application,
     private val authRepository: AuthRepository = AuthRepository()
-) : ViewModel() {
+) : AndroidViewModel(application) {
 
     private val _uiState = MutableStateFlow(ProfileState())
     val uiState = _uiState.asStateFlow()
@@ -36,13 +41,15 @@ class ProfileViewModel(
     private val _eventFlow = MutableSharedFlow<Event>()
     val eventFlow = _eventFlow.asSharedFlow()
 
+    private val exceptionHandler = (application as App).coroutineExceptionHandler
+
     init {
         checkInitialFacebookLinkStatus()
         loadUserProfile()
     }
 
     private fun loadUserProfile() {
-        viewModelScope.launch {
+        viewModelScope.launch(exceptionHandler) {
             val userId = Firebase.auth.currentUser?.uid ?: return@launch
             val profile = authRepository.getUserProfile(userId)
             if (profile != null) {
@@ -75,7 +82,7 @@ class ProfileViewModel(
             return
         }
 
-        viewModelScope.launch {
+        viewModelScope.launch(exceptionHandler) {
             _uiState.update { it.copy(isLoading = true, errorMessage = null) }
 
             // تأكد من وجود مستخدم مُسجّل
@@ -100,7 +107,7 @@ class ProfileViewModel(
     }
 
     fun onFacebookLoginSuccess(token: AccessToken) {
-        viewModelScope.launch {
+        viewModelScope.launch(exceptionHandler) {
             _uiState.update { it.copy(isLoading = true, errorMessage = null) }
 
             val result = authRepository.linkFacebookAccount(token)
@@ -124,7 +131,7 @@ class ProfileViewModel(
                 val photoUrl = me.optJSONObject("picture")?.optJSONObject("data")?.optString("url")
 
                 if (name != null && photoUrl != null) {
-                    viewModelScope.launch {
+                    viewModelScope.launch(exceptionHandler) {
                         val result = authRepository.updateUserFacebookProfile(name, photoUrl)
                         if (result.isSuccess) {
                             _uiState.update { it.copy(isLoading = false, facebookName = name, facebookPhotoUrl = photoUrl) }
@@ -146,5 +153,15 @@ class ProfileViewModel(
         parameters.putString("fields", "name,picture.type(large)")
         request.parameters = parameters
         request.executeAsync()
+    }
+}
+
+class ProfileViewModelFactory(private val application: Application) : ViewModelProvider.Factory {
+    override fun <T : ViewModel> create(modelClass: Class<T>): T {
+        if (modelClass.isAssignableFrom(ProfileViewModel::class.java)) {
+            @Suppress("UNCHECKED_CAST")
+            return ProfileViewModel(application) as T
+        }
+        throw IllegalArgumentException("Unknown ViewModel class")
     }
 }

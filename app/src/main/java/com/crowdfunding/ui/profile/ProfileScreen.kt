@@ -1,5 +1,6 @@
 package com.crowdfunding.ui.profile
 
+import android.app.Application
 import android.widget.Toast
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.compose.foundation.Image
@@ -20,6 +21,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import coil.compose.rememberAsyncImagePainter
 import com.crowdfunding.R
 import com.crowdfunding.ui.common.StandardTopAppBar
+import com.crowdfunding.util.CrashlyticsUtils
 import com.facebook.CallbackManager
 import com.facebook.FacebookCallback
 import com.facebook.FacebookException
@@ -32,7 +34,9 @@ import java.util.*
 fun ProfileScreen(
     email: String,
     onActivated: () -> Unit,
-    viewModel: ProfileViewModel = viewModel()
+    viewModel: ProfileViewModel = viewModel(
+        factory = ProfileViewModelFactory(LocalContext.current.applicationContext as Application)
+    )
 ) {
     val uiState by viewModel.uiState.collectAsState()
     val context = LocalContext.current
@@ -52,12 +56,15 @@ fun ProfileScreen(
     DisposableEffect(Unit) {
         loginManager.registerCallback(callbackManager, object : FacebookCallback<LoginResult> {
             override fun onSuccess(result: LoginResult) {
-                viewModel.onFacebookLoginSuccess(result.accessToken)
+                CrashlyticsUtils.safeRun(rethrow = false) {
+                    viewModel.onFacebookLoginSuccess(result.accessToken)
+                }
             }
             override fun onCancel() {
                 Toast.makeText(context, context.getString(R.string.toast_facebook_login_canceled), Toast.LENGTH_SHORT).show()
             }
             override fun onError(error: FacebookException) {
+                CrashlyticsUtils.record(error)
                 Toast.makeText(context, context.getString(R.string.toast_facebook_login_error, error.message), Toast.LENGTH_LONG).show()
             }
         })
@@ -129,7 +136,7 @@ fun ProfileScreen(
             }
 
             Button(
-                onClick = { facebookLoginLauncher.launch(listOf("email", "public_profile")) },
+                onClick = { CrashlyticsUtils.safeRun(rethrow = false) { facebookLoginLauncher.launch(listOf("email", "public_profile")) } },
                 modifier = Modifier.fillMaxWidth(),
                 enabled = !uiState.isFacebookLinked
             ) {
@@ -148,7 +155,7 @@ fun ProfileScreen(
             }
 
             Button(
-                onClick = viewModel::activateProfile,
+                onClick = { CrashlyticsUtils.safeRun(rethrow = false) { viewModel.activateProfile() } },
                 modifier = Modifier.fillMaxWidth(),
                 enabled = !uiState.isLoading
             ) {

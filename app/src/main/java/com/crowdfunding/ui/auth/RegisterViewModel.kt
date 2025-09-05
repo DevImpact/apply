@@ -1,8 +1,12 @@
 package com.crowdfunding.ui.auth
 
+import android.app.Application
 import android.util.Patterns
+import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
+import com.crowdfunding.App
 import com.crowdfunding.data.AuthRepository
 import com.google.firebase.auth.FirebaseAuthUserCollisionException
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -22,11 +26,14 @@ data class RegisterUiState(
 )
 
 class RegisterViewModel(
+    application: Application,
     private val repository: AuthRepository = AuthRepository()
-) : ViewModel() {
+) : AndroidViewModel(application) {
 
     private val _uiState = MutableStateFlow(RegisterUiState())
     val uiState = _uiState.asStateFlow()
+
+    private val exceptionHandler = (application as App).coroutineExceptionHandler
 
     fun onEmailChange(email: String) {
         _uiState.update { it.copy(email = email, errorMessage = null) }
@@ -63,7 +70,7 @@ class RegisterViewModel(
             return
         }
 
-        viewModelScope.launch {
+        viewModelScope.launch(exceptionHandler) {
             _uiState.update { it.copy(isLoading = true) }
             val result = repository.createUser(state.email, state.password)
             result.onSuccess {
@@ -76,5 +83,15 @@ class RegisterViewModel(
                 _uiState.update { it.copy(isLoading = false, errorMessage = errorMessage) }
             }
         }
+    }
+}
+
+class RegisterViewModelFactory(private val application: Application) : ViewModelProvider.Factory {
+    override fun <T : ViewModel> create(modelClass: Class<T>): T {
+        if (modelClass.isAssignableFrom(RegisterViewModel::class.java)) {
+            @Suppress("UNCHECKED_CAST")
+            return RegisterViewModel(application) as T
+        }
+        throw IllegalArgumentException("Unknown ViewModel class")
     }
 }

@@ -14,9 +14,13 @@ coilCompose = "2.6.0"
 facebookSdk = "16.3.0"
 firebase-bom = "33.1.2"
 googleServicesPlugin = "4.4.3"
+firebaseCrashlyticsPlugin = "3.0.6"
 materialIcons = "1.7.1"
+timber = "5.0.1"
 
 [libraries]
+timber = { module = "com.jakewharton.timber:timber", version.ref = "timber" }
+firebase-crashlytics = { module = "com.google.firebase:firebase-crashlytics" }
 facebook-android-sdk = { group = "com.facebook.android", name = "facebook-login", version.ref = "facebookSdk" }
 
 androidx-navigation-compose = { group = "androidx.navigation", name = "navigation-compose", version.ref = "navigationCompose" }
@@ -51,3 +55,4 @@ android-application = { id = "com.android.application", version.ref = "agp" }
 kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
 kotlin-compose = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
 google-services = { id = "com.google.gms.google-services", version.ref = "googleServicesPlugin" }
+firebase-crashlytics = { id = "com.google.firebase.crashlytics", version.ref = "firebaseCrashlyticsPlugin" }

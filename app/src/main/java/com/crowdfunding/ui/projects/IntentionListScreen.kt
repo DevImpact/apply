@@ -3,7 +3,6 @@ package com.crowdfunding.ui.projects
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.clickable
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.material3.*
@@ -15,8 +14,8 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.crowdfunding.R
 import com.crowdfunding.data.UserProfile
-
 import com.crowdfunding.ui.common.StandardTopAppBar
+import com.crowdfunding.util.safeClickable
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -64,7 +63,7 @@ fun UserItem(user: UserProfile, onItemClick: () -> Unit) {
     Row(
         modifier = Modifier
             .fillMaxWidth()
-            .clickable(onClick = onItemClick)
+            .safeClickable(rethrow = true, onClick = onItemClick)
             .padding(16.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {

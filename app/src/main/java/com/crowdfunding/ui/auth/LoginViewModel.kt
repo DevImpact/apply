@@ -1,8 +1,12 @@
 package com.crowdfunding.ui.auth
 
+import android.app.Application
 import android.util.Patterns
+import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
+import com.crowdfunding.App
 import com.crowdfunding.data.AuthRepository
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -19,11 +23,14 @@ data class LoginUiState(
 )
 
 class LoginViewModel(
+    application: Application,
     private val repository: AuthRepository = AuthRepository()
-) : ViewModel() {
+) : AndroidViewModel(application) {
 
     private val _uiState = MutableStateFlow(LoginUiState())
     val uiState = _uiState.asStateFlow()
+
+    private val exceptionHandler = (application as App).coroutineExceptionHandler
 
     fun onEmailChange(email: String) {
         _uiState.update { it.copy(email = email, errorMessage = null) }
@@ -51,7 +58,7 @@ class LoginViewModel(
             return
         }
 
-        viewModelScope.launch {
+        viewModelScope.launch(exceptionHandler) {
             _uiState.update { it.copy(isLoading = true) }
             val result = repository.signIn(email, password)
             result.onSuccess {
@@ -60,5 +67,15 @@ class LoginViewModel(
                 _uiState.update { it.copy(isLoading = false, errorMessage = "بيانات الدخول غير صحيحة") }
             }
         }
+    }
+}
+
+class LoginViewModelFactory(private val application: Application) : ViewModelProvider.Factory {
+    override fun <T : ViewModel> create(modelClass: Class<T>): T {
+        if (modelClass.isAssignableFrom(LoginViewModel::class.java)) {
+            @Suppress("UNCHECKED_CAST")
+            return LoginViewModel(application) as T
+        }
+        throw IllegalArgumentException("Unknown ViewModel class")
     }
 }

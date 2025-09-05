@@ -21,6 +21,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import com.crowdfunding.R
 import com.crowdfunding.data.IntentionKeys
 import com.crowdfunding.ui.common.StandardTopAppBar
+import com.crowdfunding.util.CrashlyticsUtils
 
 @Composable
 fun ProjectDetailScreen(
@@ -42,7 +43,7 @@ fun ProjectDetailScreen(
         topBar = {
             StandardTopAppBar(
                 title = stringResource(R.string.title_project_details),
-                onNavigateBack = onNavigateBack
+                onNavigateBack = { CrashlyticsUtils.safeRun(rethrow = true) { onNavigateBack() } }
             )
         }
     ) { paddingValues ->
@@ -75,7 +76,7 @@ fun ProjectDetailScreen(
 
                 Text(stringResource(R.string.attachments), style = MaterialTheme.typography.titleMedium)
                 project.pdfLinks.values.forEach { link ->
-                    TextButton(onClick = { downloadFile(context, link, "project_file.pdf") }) {
+                    TextButton(onClick = { CrashlyticsUtils.safeRun(rethrow = false) { downloadFile(context, link, "project_file.pdf") } }) {
                         Text(stringResource(R.string.download_pdf_prefix) + " ${Uri.parse(link).lastPathSegment}")
                     }
                 }
@@ -84,9 +85,9 @@ fun ProjectDetailScreen(
                 Text(stringResource(R.string.my_intention_prefix) + " ${uiState.currentUserIntention ?: stringResource(R.string.intention_none)}", style = MaterialTheme.typography.titleMedium)
                 Spacer(modifier = Modifier.height(8.dp))
                 Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                    Button(onClick = { viewModel.handleIntention(IntentionKeys.INVESTORS) }) { Text(stringResource(R.string.invest_button)) }
-                    Button(onClick = { viewModel.handleIntention(IntentionKeys.DONORS) }) { Text(stringResource(R.string.donate_button)) }
-                    Button(onClick = { viewModel.handleIntention(IntentionKeys.ADVERTISERS) }) { Text(stringResource(R.string.advertise_button)) }
+                    Button(onClick = { CrashlyticsUtils.safeRun(rethrow = false) { viewModel.handleIntention(IntentionKeys.INVESTORS) } }) { Text(stringResource(R.string.invest_button)) }
+                    Button(onClick = { CrashlyticsUtils.safeRun(rethrow = false) { viewModel.handleIntention(IntentionKeys.DONORS) } }) { Text(stringResource(R.string.donate_button)) }
+                    Button(onClick = { CrashlyticsUtils.safeRun(rethrow = false) { viewModel.handleIntention(IntentionKeys.ADVERTISERS) } }) { Text(stringResource(R.string.advertise_button)) }
                 }
                 Spacer(modifier = Modifier.height(16.dp))
                 Row(
@@ -94,13 +95,13 @@ fun ProjectDetailScreen(
                     horizontalArrangement = Arrangement.SpaceAround,
                     verticalAlignment = Alignment.CenterVertically
                 ) {
-                    Button(onClick = { onNavigateToIntentionList(project.id, IntentionKeys.INVESTORS) }) {
+                    Button(onClick = { CrashlyticsUtils.safeRun(rethrow = true) { onNavigateToIntentionList(project.id, IntentionKeys.INVESTORS) } }) {
                         Text(stringResource(R.string.see_investors_button))
                     }
-                    Button(onClick = { onNavigateToIntentionList(project.id, IntentionKeys.DONORS) }) {
+                    Button(onClick = { CrashlyticsUtils.safeRun(rethrow = true) { onNavigateToIntentionList(project.id, IntentionKeys.DONORS) } }) {
                         Text(stringResource(R.string.see_donors_button))
                     }
-                    Button(onClick = { onNavigateToIntentionList(project.id, IntentionKeys.ADVERTISERS) }) {
+                    Button(onClick = { CrashlyticsUtils.safeRun(rethrow = true) { onNavigateToIntentionList(project.id, IntentionKeys.ADVERTISERS) } }) {
                         Text(stringResource(R.string.see_advertisers_button))
                     }
                 }
@@ -114,7 +115,7 @@ fun ProjectDetailScreen(
 }
 
 fun downloadFile(context: Context, url: String, fileName: String) {
-    try {
+    CrashlyticsUtils.safeRun(rethrow = false) {
         val request = DownloadManager.Request(Uri.parse(url))
             .setTitle(fileName)
             .setDescription(context.getString(R.string.downloading))
@@ -122,7 +123,5 @@ fun downloadFile(context: Context, url: String, fileName: String) {
             .setDestinationInExternalPublicDir(Environment.DIRECTORY_DOWNLOADS, fileName)
         val downloadManager = context.getSystemService(Context.DOWNLOAD_SERVICE) as DownloadManager
         downloadManager.enqueue(request)
-    } catch (e: Exception) {
-        // Handle exceptions, e.g., invalid URL
     }
 }
