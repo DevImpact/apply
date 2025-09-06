@@ -1,5 +1,6 @@
 package com.crowdfunding.data
 
+import androidx.annotation.Keep
 import com.crowdfunding.ui.projects.IntentionRecord
 import com.facebook.AccessToken
 import com.google.firebase.auth.AuthResult
@@ -16,6 +17,7 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.callbackFlow
 import kotlinx.coroutines.tasks.await
 
+@Keep
 data class UserProfile(
     val uid: String = "",
     val fullName: String = "",

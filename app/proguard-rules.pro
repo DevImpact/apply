@@ -19,3 +19,9 @@
 # If you keep the line number information, uncomment this to
 # hide the original source file name.
 #-renamesourcefileattribute SourceFile
+
+# Keep data classes used by Firebase Realtime Database from being stripped.
+# These classes need to have a no-argument constructor and their properties
+# available for reflection during deserialization.
+-keep class com.crowdfunding.data.UserProfile { *; }
+-keep class com.crowdfunding.ui.projects.IntentionRecord { *; }
