@@ -10,7 +10,7 @@ import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.unit.LayoutDirection
 import com.crowdfunding.ui.theme.CrowdFundingTheme
 import android.util.Log
-import com.android.installreferrer.BuildConfig
+import com.crowdfunding.BuildConfig
 import com.crowdfunding.ads.InterstitialManager
 import com.google.android.gms.ads.MobileAds
 import com.google.android.ump.*
