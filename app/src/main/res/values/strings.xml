@@ -1,15 +1,12 @@
 <resources>
     <string name="app_name">مشاريع إستثماريّة</string>
-    <string name="facebook_app_id">102031639868996</string>
-    <string name="fb_login_protocol_scheme">fb102031639868996</string>
-    <string name="facebook_client_token">c8529e6b20f9f0955eb6beb8e107d6f0ab21d4d02bf0db77e13ecd38f2be85c5</string>
 
     <string name="update_profile">تحديث الملف الشخصي</string>
     <string name="send_verification_code">إرسال رمز التحقق</string>
     <string name="verification_code">رمز التحقق</string>
     <string name="first_name">الاسم الأول</string>
     <string name="last_name">الاسم الأخير</string>
-    <string name="confirm_facebook_link">الربط مع فيسبوك</string>
+    <string name="phone_number">رقم الهاتف</string>
     <string name="dont_have_account">ليس لديك حساب؟</string>
     <string name="register_now">سجل الآن</string>
     <string name="already_have_account">هل لديك حساب بالفعل؟</string>
@@ -41,10 +38,6 @@
     <!-- Profile Screen -->
     <string name="complete_your_profile">أكمل ملفك الشخصي</string>
     <string name="activate_profile">تفعيل الملف الشخصي</string>
-    <string name="toast_facebook_login_success">تم تسجيل الدخول بنجاح عبر فيسبوك!</string>
-    <string name="toast_facebook_login_canceled">تم إلغاء تسجيل الدخول عبر فيسبوك.</string>
-    <string name="toast_facebook_login_error">خطأ في تسجيل الدخول عبر فيسبوك: %1$s</string>
-    <string name="facebook_linked_button">تم الربط</string>
 
     <!-- Projects Screen -->
     <string name="no_projects_yet">لا توجد مشاريع حتى الآن.</string>

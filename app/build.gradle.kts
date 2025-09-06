@@ -72,9 +72,6 @@ dependencies {
     // Logging
     implementation(libs.timber)
 
-    // Facebook SDK
-    implementation(libs.facebook.android.sdk)
-
     // Firebase
     implementation(platform(libs.firebase.bom))
     implementation(libs.firebase.database)

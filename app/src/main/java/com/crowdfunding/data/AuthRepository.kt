@@ -2,9 +2,7 @@ package com.crowdfunding.data
 
 import androidx.annotation.Keep
 import com.crowdfunding.ui.projects.IntentionRecord
-import com.facebook.AccessToken
 import com.google.firebase.auth.AuthResult
-import com.google.firebase.auth.FacebookAuthProvider
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.database.DataSnapshot
@@ -23,8 +21,7 @@ data class UserProfile(
     val fullName: String = "",
     val email: String = "",
     val activated: Boolean = false,
-    val facebookName: String? = null,
-    val facebookPhotoUrl: String? = null
+    val phoneNumber: String? = null
 )
 
 class AuthRepository {
@@ -113,34 +110,11 @@ class AuthRepository {
         }
     }
 
-    suspend fun linkFacebookAccount(token: AccessToken): Result<Unit> {
-        return try {
-            val credential = FacebookAuthProvider.getCredential(token.token)
-            val user = auth.currentUser ?: throw IllegalStateException("User not logged in")
-
-            // Link the credential to the existing user
-            user.linkWithCredential(credential).await()
-
-            // After successful linking, save the provider info to the database
-            val providerData = mapOf(
-                "linked" to true,
-                "appScopedId" to token.userId,
-                "linkedAt" to System.currentTimeMillis()
-            )
-            usersRef.child(user.uid).child("providers").child("facebook").setValue(providerData).await()
-
-            Result.success(Unit)
-        } catch (e: Exception) {
-            Result.failure(e)
-        }
-    }
-
-    suspend fun updateUserFacebookProfile(name: String, photoUrl: String): Result<Unit> {
+    suspend fun updateUserPhoneNumber(phoneNumber: String): Result<Unit> {
         return try {
             val user = auth.currentUser ?: throw IllegalStateException("User not logged in")
             val updates = mapOf(
-                "facebookName" to name,
-                "facebookPhotoUrl" to photoUrl
+                "phoneNumber" to phoneNumber
             )
             usersRef.child(user.uid).updateChildren(updates).await()
             Result.success(Unit)
