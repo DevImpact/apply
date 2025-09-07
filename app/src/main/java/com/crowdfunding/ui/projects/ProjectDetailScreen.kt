@@ -69,9 +69,9 @@ fun ProjectDetailScreen(
                 Spacer(modifier = Modifier.height(16.dp))
 
                 Text(stringResource(R.string.statistics), style = MaterialTheme.typography.titleMedium)
-                Text(stringResource(R.string.investors_count, project.stats.investors))
-                Text(stringResource(R.string.donors_count, project.stats.donors))
-                Text(stringResource(R.string.advertisers_count, project.stats.advertisers))
+                Text(stringResource(R.string.investors_count, project.stats.getInvestorsCount()))
+                Text(stringResource(R.string.donors_count, project.stats.getDonorsCount()))
+                Text(stringResource(R.string.advertisers_count, project.stats.getAdvertisersCount()))
                 Spacer(modifier = Modifier.height(16.dp))
 
                 Text(stringResource(R.string.attachments), style = MaterialTheme.typography.titleMedium)
