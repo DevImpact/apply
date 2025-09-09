@@ -7,6 +7,7 @@ import com.google.firebase.database.*
 import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
 import kotlinx.coroutines.tasks.await
+import timber.log.Timber
 
 class ProjectsRepository {
 
@@ -17,10 +18,33 @@ class ProjectsRepository {
 
     suspend fun getProjects(): List<Project> {
         return try {
+            Timber.tag("ProjectDebug").d("Fetching projects...")
             val dataSnapshot = projectsRef.get().await()
-            dataSnapshot.children.mapNotNull { it.getValue(Project::class.java) }
+            Timber.tag("ProjectDebug").d("Raw data snapshot value: ${dataSnapshot.value}")
+
+            if (!dataSnapshot.exists()) {
+                Timber.tag("ProjectDebug").w("Projects node does not exist.")
+                return emptyList()
+            }
+
+            val projects = dataSnapshot.children.mapNotNull { snapshot ->
+                try {
+                    val project = snapshot.getValue(Project::class.java)
+                    if (project != null) {
+                        Timber.tag("ProjectDebug").d("Successfully parsed project: ${project.id}")
+                    } else {
+                        Timber.tag("ProjectDebug").w("Parsed project is null for key: ${snapshot.key}")
+                    }
+                    project
+                } catch (e: Exception) {
+                    Timber.tag("ProjectDebug").e(e, "Failed to parse project with key: ${snapshot.key}")
+                    null
+                }
+            }
+            Timber.tag("ProjectDebug").d("Finished parsing. Total projects parsed: ${projects.size} out of ${dataSnapshot.childrenCount} raw entries.")
+            projects
         } catch (e: Exception) {
-            // Log the error
+            Timber.tag("ProjectDebug").e(e, "Failed to fetch projects from Firebase.")
             emptyList()
         }
     }
