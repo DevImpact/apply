@@ -21,7 +21,9 @@ data class UserProfile(
     val fullName: String = "",
     val email: String = "",
     val activated: Boolean = false,
-    val phoneNumber: String? = null
+    val phoneNumber: String? = null,
+    val role: String? = null,
+    val createdAt: Long? = null
 )
 
 class AuthRepository {
